@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public User convertDtoToEntity(UserDTO dto){
+        return new User(dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getCpf());
+    }
 }

@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users")
 public class UserController {
 
     private final UserService userService;
@@ -23,10 +26,13 @@ public class UserController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<User> save(@RequestBody UserDTO dto) {
-        User user = userService.save(dto.ConvertDtoToEntity());
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    @PostMapping(value = "/")
+    public ResponseEntity<Void> save(@RequestBody UserDTO dto) {
+        User user = userService.save(userService.convertDtoToEntity(dto));
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(user.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
 
