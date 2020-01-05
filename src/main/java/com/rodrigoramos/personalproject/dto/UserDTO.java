@@ -1,5 +1,6 @@
-package com.rodrigoramos.personalproject.model;
+package com.rodrigoramos.personalproject.dto;
 
+import com.rodrigoramos.personalproject.model.User;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,24 +10,19 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-public class User {
+public class UserDTO {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String cpf;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(String firstName, String lastName, String email, String cpf) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.cpf = cpf;
+    public User ConvertDtoToEntity(){
+        return new User(firstName, lastName, email, cpf);
     }
-
-
 }
