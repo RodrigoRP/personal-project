@@ -4,29 +4,30 @@ import com.rodrigoramos.personalproject.model.User;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserResponseDTO {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private String cpf;
+    private Boolean admin;
 
-    public UserDTO() {
+    public UserResponseDTO() {
     }
 
-    public UserDTO(String firstName, String lastName, String email, String cpf) {
+    public UserResponseDTO(Long id, String firstName, String lastName, String email, Boolean admin) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.cpf = cpf;
+        this.admin = admin;
     }
 
-    public UserDTO(User user) {
+    public UserResponseDTO(User user) {
+        this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
-        this.cpf = user.getCpf();
+        this.admin = user.getAdmin();
     }
-
-
 }
