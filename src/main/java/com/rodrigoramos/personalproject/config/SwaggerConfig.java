@@ -32,7 +32,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)
-                .globalResponseMessage(RequestMethod.GET, responseMessageForGET())
+                //.globalResponseMessage(RequestMethod.GET, responseMessageForGET())
                 .securitySchemes(Arrays.asList(new ApiKey("Token Access", HttpHeaders.AUTHORIZATION, In.HEADER.name())))
                 .securityContexts(Arrays.asList(securityContext()))
                 .apiInfo(apiInfo());
@@ -69,7 +69,7 @@ public class SwaggerConfig {
     }*/
 
 
-    private List<ResponseMessage> responseMessageForGET()
+/*    private List<ResponseMessage> responseMessageForGET()
     {
         return new ArrayList<ResponseMessage>() {
             private static final long serialVersionUID = 1L;
@@ -85,7 +85,7 @@ public class SwaggerConfig {
                         .message("Forbidden!")
                         .build());
             }};
-    }
+    }*/
 
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope

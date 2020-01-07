@@ -33,6 +33,7 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
