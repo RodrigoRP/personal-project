@@ -10,15 +10,17 @@ public class UserDTO {
     private String lastName;
     private String email;
     private String cpf;
+    private String password;
 
     public UserDTO() {
     }
 
-    public UserDTO(String firstName, String lastName, String email, String cpf) {
+    public UserDTO(String firstName, String lastName, String email, String cpf, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.cpf = cpf;
+        this.password = password;
     }
 
     public UserDTO(User user) {

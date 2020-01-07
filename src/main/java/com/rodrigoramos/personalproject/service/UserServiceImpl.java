@@ -30,12 +30,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User convertDtoToEntity(UserDTO dto) {
-        return new User(null, dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getCpf(), null);
+        return new User(null, dto.getFirstName(), dto.getLastName(), dto.getEmail(), dto.getCpf(), null, null);
     }
 
     @Override
     public UserDTO convertEntityToDto(User user) {
-        return new UserDTO(user.getFirstName(), user.getLastName(), user.getEmail(), user.getCpf());
+        return new UserDTO(user.getFirstName(), user.getLastName(), user.getEmail(), user.getCpf(), null);
     }
 
     @Override
