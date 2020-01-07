@@ -5,25 +5,27 @@ import com.rodrigoramos.personalproject.security.JWTUtil;
 import com.rodrigoramos.personalproject.security.UserSS;
 import com.rodrigoramos.personalproject.service.AuthService;
 import com.rodrigoramos.personalproject.service.UserServiceSS;
-import com.rodrigoramos.personalproject.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+@RestController
+@RequestMapping(value = "/auth")
 public class AuthController {
 
-    @Autowired
-    private JWTUtil jwtUtil;
+    private final JWTUtil jwtUtil;
+    private final AuthService service;
 
     @Autowired
-    private AuthService service;
+    public AuthController(JWTUtil jwtUtil, AuthService service) {
+        this.jwtUtil = jwtUtil;
+        this.service = service;
+    }
 
-    @RequestMapping(value = "/refresh_token", method = RequestMethod.POST)
+    @PostMapping(value = "/refresh_token")
     public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
         UserSS user = UserServiceSS.authenticated();
         String token = jwtUtil.generateToken(user.getUsername());
@@ -32,7 +34,7 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/forgot", method = RequestMethod.POST)
+    @PostMapping(value = "/forgot")
     public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDto) {
         service.sendNewPassword(objDto.getEmail());
         return ResponseEntity.noContent().build();
