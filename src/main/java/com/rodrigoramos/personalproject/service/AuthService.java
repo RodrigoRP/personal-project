@@ -13,16 +13,19 @@ import java.util.Random;
 @Service
 public class AuthService {
 
-    private UserRepository userRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private EmailService emailService;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailService emailService;
 
     private Random rand = new Random();
 
     @Autowired
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.emailService = emailService;
     }
+
 
     public void sendNewPassword(String email) {
         User user = userRepository.findByEmail(email);
@@ -30,8 +33,7 @@ public class AuthService {
             throw new ObjectNotFoundException("E-mail not found!");
         }
         String newPass = newPassword();
-        user.setPassword(bCryptPasswordEncoder.encode(newPass));
-
+        user. setPassword(bCryptPasswordEncoder.encode(newPass));
         userRepository.save(user);
         emailService.sendNewPasswordEmail(user, newPass);
     }

@@ -50,4 +50,5 @@ public class User {
     public void addPerfil(Profile profile) {
         profiles.add(profile.getCod());
     }
+
 }
