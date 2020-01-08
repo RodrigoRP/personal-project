@@ -56,33 +56,6 @@ public class SwaggerConfig {
                 .build();
     }
 
-/*    List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope
-                = new AuthorizationScope("ADMIN", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Lists.newArrayList(
-                new SecurityReference("Token Access", authorizationScopes));
-    }*/
-
-
-/*    private List<ResponseMessage> responseMessageForGET()
-    {
-        return new ArrayList<ResponseMessage>() {
-            private static final long serialVersionUID = 1L;
-
-            {
-                add(new ResponseMessageBuilder()
-                        .code(500)
-                        .message("500 message")
-                        .responseModel(new ModelRef("Error"))
-                        .build());
-                add(new ResponseMessageBuilder()
-                        .code(403)
-                        .message("Forbidden!")
-                        .build());
-            }};
-    }*/
 
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope

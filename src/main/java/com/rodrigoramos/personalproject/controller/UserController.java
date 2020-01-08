@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/")
-    public ResponseEntity<UserResponseDTO> save(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody UserDTO dto) {
         User user = userService.save(userService.convertDtoToEntity(dto));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(user.getId()).toUri();
