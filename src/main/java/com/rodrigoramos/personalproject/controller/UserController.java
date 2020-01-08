@@ -2,6 +2,7 @@ package com.rodrigoramos.personalproject.controller;
 
 import com.rodrigoramos.personalproject.dto.UserDTO;
 import com.rodrigoramos.personalproject.dto.UserResponseDTO;
+import com.rodrigoramos.personalproject.dto.UserUpdateDTO;
 import com.rodrigoramos.personalproject.model.User;
 import com.rodrigoramos.personalproject.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,14 @@ public class UserController {
         userService.deleteUserByEmail(email);
         return ResponseEntity.noContent().build();
 
+    }
+
+    @PutMapping(value="/{id}")
+    public ResponseEntity<Void> update(@Valid @RequestBody UserUpdateDTO objDto, @PathVariable Long id) {
+        User obj = userService.convertUpdateDtoToEntity(objDto);
+        obj.setId(id);
+        obj = userService.updateUser(obj);
+        return ResponseEntity.noContent().build();
     }
 
 }
