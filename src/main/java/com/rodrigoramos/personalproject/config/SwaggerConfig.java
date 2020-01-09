@@ -53,7 +53,8 @@ public class SwaggerConfig {
                 .securityReferences(defaultAuth())
                 .forPaths(PathSelectors.ant("/users/**"))
                 .forPaths(PathSelectors.ant("/restaurants/**"))
-               // .forPaths(PathSelectors.regex("/anyPath.*"))
+                .forPaths(PathSelectors.ant("/vote/**"))
+                // .forPaths(PathSelectors.regex("/anyPath.*"))
                 .build();
     }
 

@@ -1,57 +1,77 @@
-version: 2.1
+version: 2
 jobs:
-  Hello-World:
+  build:
+    environment:
+      # Configure the JVM and Gradle to avoid OOM errors
+      _JAVA_OPTIONS: "-Xmx3g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     docker:
-      - image: alpine:3.7
-    steps:
-      - run:
-          name: Hello World
-          command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-  I-Have-Code:
-    docker:
-      - image: alpine:3.7
+      - image: circleci/openjdk:8u232-stretch
+    resource_class: medium
     steps:
       - checkout
       - run:
-          name: Code Has Arrived
-          command: |
-            ls -al
-            echo '^^^That should look familiar^^^'
-  Run-With-Node:
-    docker:
-      - image: circleci/node:10-browsers
-    steps:
+          name: Change application properties
+          command: echo $SPRING | base64 --decode >> central-erros/src/main/resources/application.properties && echo "$(cat central-erros/src/main/resources/application.properties)"
       - run:
-          name: Running In A Container With Node
-          command: |
-            node -v
-  Now-Complete:
+          name: Install dependencies
+          command: cd central-erros && ./gradlew clean build --refresh-dependencies --info
+  test:
+    environment:
+      # Configure the JVM and Gradle to avoid OOM errors
+      _JAVA_OPTIONS: "-Xmx3g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     docker:
-      - image: alpine:3.7
+      - image: circleci/openjdk:8u171-jdk
     steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - run:
-          name: Approval Complete
+          name: Run tests
+          command: cd central-erros && ./gradlew test
+      - run:
+          name: Generate code coverage report
+          command:
+            cd central-erros && ./gradlew jacocoTestReport
+      - run:
+          name: Change application properties
+          command: echo $SPRING | base64 --decode >> central-erros/src/main/resources/application.properties
+      - store_test_results:
+          path: central-erros/build/test-results/test
+      - store_artifacts:
+          path: central-erros/build/test-results/test
+          when: always
+      - store_artifacts:
+          path: central-erros/build/reports/jacoco/test/html
+          when: always
+  deploy:
+    docker:
+      - image: circleci/openjdk:8u222-jdk-stretch
+    steps:
+      - checkout
+      - run:
+          name: Create jar
+          command: cd central-erros && ./gradlew bootJar
+      - run:
+          name: Change application properties
+          command: echo $SPRING | base64 --decode >> central-erros/src/main/resources/application.properties
+      - run:
+          name: Deploy Master to Heroku
           command: |
-            echo 'Do work once the approval has completed'
-
+            git subtree push --prefix central-erros https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
 workflows:
- version: 2
- Example_Workflow:
-   jobs:
-     - Hello-World
-     - I-Have-Code:
-         requires:
-           - Hello-World
-     - Run-With-Node:
-         requires:
-           - Hello-World
-     - Hold-For-Approval:
-         type: approval
-         requires:
-           - Run-With-Node
-           - I-Have-Code
-     - Now-Complete:
-         requires:
-           - Hold-For-Approval
+  version: 2
+  workflow:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only: master

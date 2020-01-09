@@ -8,4 +8,6 @@ public interface RestaurantService {
     Restaurant save(Restaurant restaurant);
 
     Restaurant convertDtoToEntity(RestaurantDTO dto);
+
+    Restaurant findById(Long id);
 }
