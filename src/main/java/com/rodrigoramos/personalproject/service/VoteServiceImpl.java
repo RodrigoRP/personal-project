@@ -17,14 +17,17 @@ import java.time.LocalDate;
 @Service
 public class VoteServiceImpl implements VoteService {
 
-    @Autowired
-    private VoteRepository voteRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RestaurantService restaurantService;
-    @Autowired
-    private UserService userService;
+    private final VoteRepository voteRepository;
+    private final UserRepository userRepository;
+    private final RestaurantService restaurantService;
+    private final UserService userService;
+
+    public VoteServiceImpl(VoteRepository voteRepository, UserRepository userRepository, RestaurantService restaurantService, UserService userService) {
+        this.voteRepository = voteRepository;
+        this.userRepository = userRepository;
+        this.restaurantService = restaurantService;
+        this.userService = userService;
+    }
 
     @Override
     public Vote save(Long idRestaurant) {
@@ -32,28 +35,23 @@ public class VoteServiceImpl implements VoteService {
         User user = userRepository.findByEmail(loggedUser.getUsername());
         Restaurant restaurant = restaurantService.findById(idRestaurant);
         LocalDate date = LocalDate.now();
-        Vote hasAlreadyVotedToday = voteRepository.findByIdAndDate(loggedUser.getId(),date);
 
-        if(hasAlreadyVotedToday == null) {
+        Vote hasAlreadyVotedToday = voteRepository.findAllByDateAndUserId(date, user.getId());
+        if (hasAlreadyVotedToday == null) {
             Vote vote = new Vote(user, restaurant, date);
             return createVote(vote);
         }
+        return updateVote(hasAlreadyVotedToday, restaurant, user);
 
-        return updateVote(hasAlreadyVotedToday, restaurant);
-
-
-
-      //  Vote vote = new Vote(user, restaurant, date);
-       // return voteRepository.save(vote);
     }
 
-    private Vote updateVote(Vote hasAlreadyVotedToday, Restaurant restaurant) {
-         Vote vote = new Vote();
-         vote.setId(hasAlreadyVotedToday.getId());
-         vote.setDate(hasAlreadyVotedToday.getDate());
-         vote.setUser(hasAlreadyVotedToday.getUser());
-         vote.setRestaurant(restaurant);
-         return voteRepository.save(vote);
+    private Vote updateVote(Vote hasAlreadyVotedToday, Restaurant restaurant, User user) {
+        Vote vote = new Vote();
+        vote.setId(hasAlreadyVotedToday.getId());
+        vote.setDate(hasAlreadyVotedToday.getDate());
+        vote.setUser(user);
+        vote.setRestaurant(restaurant);
+        return voteRepository.save(vote);
 
     }
 
@@ -62,36 +60,4 @@ public class VoteServiceImpl implements VoteService {
         return voteRepository.save(vote);
     }
 
-    /* public void vote() {
-         this.checkVotingAvailability(LocalTime.now(VoteService.ZONE_ID));
-
-         User user = userRepository.findByEmail(UserServiceSS.authenticated().getUsername());
-         if (hasAlreadyVotedToday(user.getVote())) {
-             updateVote(rest_id, employee);
-         } else {
-             createVote(rest_id, employee);
-         }
-
-     }
-
-     private void createVote(Integer rest_id, User user) {
-         Vote vote = new Vote(employee);
-         vote.setRestaurant_id(rest_id);
-         vote.setDateUpdated(LocalDate.now(VoteServiceInterface.ZONE_ID));
-
-         employee.setVote(vote);
-         employeeRepository.save(employee);
-     }
-
-     public void checkVotingAvailability(LocalTime currentTime) {
-         if (currentTime.isAfter(VoteService.EXPIRATION_TIME)) {
-             throw new VotingIsUnavailableException("Horario fora");
-         }
-     }
-
- */
- /*   private boolean hasAlreadyVotedToday(Vote vote) {
-        return vote.getDateUpdated().isEqual(LocalDate.now(VoteService.ZONE_ID));
-    }
-*/
 }

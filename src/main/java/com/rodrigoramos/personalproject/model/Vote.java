@@ -17,7 +17,7 @@ public class Vote {
     public Vote() {
     }
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private User user;
 
     public Vote(User user, Restaurant restaurant, LocalDate date) {
@@ -34,7 +34,7 @@ public class Vote {
         this.user = user;
     }
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Restaurant restaurant;
 
     public Restaurant getRestaurant() {
