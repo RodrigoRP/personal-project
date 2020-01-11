@@ -9,6 +9,7 @@ import com.rodrigoramos.personalproject.service.interfaces.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,5 +37,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         Optional<Restaurant> obj = restaurantRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName()));
+    }
+
+    @Override
+    public List<Restaurant> findAll() {
+        return restaurantRepository.findAll();
     }
 }
