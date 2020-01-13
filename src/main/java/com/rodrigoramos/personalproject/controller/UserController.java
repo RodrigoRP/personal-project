@@ -35,7 +35,7 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
-    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/")
     public ResponseEntity<List<UserResponseDTO>> findAll() {
@@ -66,11 +66,11 @@ public class UserController {
 
     }
 
-    @PutMapping(value="/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update(@Valid @RequestBody UserUpdateDTO objDto, @PathVariable Long id) {
         User obj = userService.convertUpdateDtoToEntity(objDto);
         obj.setId(id);
-        obj = userService.updateUser(obj);
+        userService.updateUser(obj);
         return ResponseEntity.noContent().build();
     }
 
