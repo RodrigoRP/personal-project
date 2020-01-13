@@ -24,10 +24,9 @@ public class VoteController {
 
     @PostMapping(value = "/{idRestaurant}")
     public ResponseEntity<Void> saveVote(@PathVariable Long idRestaurant) {
-        Restaurant restaurant = restaurantService.findById(idRestaurant);
+        restaurantService.findById(idRestaurant);
+        Vote vote = voteService.save(idRestaurant);
 
-        Vote vote = new Vote();
-        vote = voteService.save(idRestaurant);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(vote.getId()).toUri();
         return ResponseEntity.created(uri).build();

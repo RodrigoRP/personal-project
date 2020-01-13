@@ -7,7 +7,6 @@ import com.rodrigoramos.personalproject.repository.UserRepository;
 import com.rodrigoramos.personalproject.repository.VoteRepository;
 import com.rodrigoramos.personalproject.security.UserSS;
 import com.rodrigoramos.personalproject.service.interfaces.RestaurantService;
-import com.rodrigoramos.personalproject.service.interfaces.UserService;
 import com.rodrigoramos.personalproject.service.interfaces.VoteService;
 import org.springframework.stereotype.Service;
 

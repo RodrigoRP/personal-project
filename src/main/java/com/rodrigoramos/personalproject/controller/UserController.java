@@ -66,7 +66,7 @@ public class UserController {
 
     }
 
-    @PutMapping(value="/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update(@Valid @RequestBody UserUpdateDTO objDto, @PathVariable Long id) {
         User obj = userService.convertUpdateDtoToEntity(objDto);
         obj.setId(id);

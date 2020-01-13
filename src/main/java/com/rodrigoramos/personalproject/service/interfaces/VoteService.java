@@ -13,8 +13,6 @@ public interface VoteService {
 
     Vote save(Long restaurant);
 
-   // Long countVoteToday();
-
     Long countVotesByRestaurant(Long restaurantId);
 
     Restaurant winnerToday();

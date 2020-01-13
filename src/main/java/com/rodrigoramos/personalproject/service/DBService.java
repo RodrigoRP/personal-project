@@ -62,12 +62,6 @@ public class DBService {
         Restaurant r5 = new Restaurant(null,"Guacamole Cocina Mexicana");
 
 
-  /*      Vote v1 = new Vote(jose, r1, LocalDate.now());
-        Vote v2 = new Vote(michael, r2, LocalDate.now());
-        Vote v3 = new Vote(nicolas, r3, LocalDate.now());
-        Vote v4 = new Vote(tom, r3, LocalDate.now());
-        Vote v5 = new Vote(fernanda, r1, LocalDate.now());*/
-
 
 
 
@@ -75,7 +69,7 @@ public class DBService {
         userRepository.saveAll(Arrays.asList(jose, michael, nicolas, robert, tom, angelina, fernanda,
                 n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12));
         restaurantRepository.saveAll(Arrays.asList(r1,r2,r3,r4,r5));
-        //voteRepository.saveAll(Arrays.asList(v1,v2,v4,v3,v5));
+
 
 
     }
